@@ -1,0 +1,609 @@
+﻿<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Portal Pay</title>
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <!--<link rel="stylesheet" href="styles/theme1.min.css" />-->
+    <link id="theme" rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css" />
+    <link rel="stylesheet" href="styles/app.css" />
+
+    <!-- vendor scripts via CDN -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.2.0/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.payment/1.0.2/jquery.payment.min.js"></script>
+
+    <!-- vendor scripts -->
+    <script src="scripts/vendor/cryptojs.min.js" defer></script>
+    <script src="scripts/vendor/uuid.js" defer></script>
+
+    <!-- application scripts -->
+    <script src="scripts/config.js" defer></script>
+    <script src="scripts/busy-indicator.service.js" defer></script>
+    <script src="scripts/address.service.js" defer></script>
+    <script src="scripts/bank-lookup.service.js" defer></script>
+    <script src="scripts/cookie.service.js" defer></script>
+    <script src="scripts/credit-card.service.js" defer></script>
+    <script src="scripts/fee.service.js" defer></script>
+    <!--<script src="scripts/fi-logo.service.js" defer></script>-->
+    <script src="scripts/page-type.service.js" defer></script>
+    <script src="scripts/popup.service.js" defer></script>
+    <script src="scripts/session.service.js" defer></script>
+    <script src="scripts/terms.service.js" defer></script>
+    <script src="scripts/theme.service.js" defer></script>
+    <script src="scripts/utility.service.js" defer></script>
+    <script src="scripts/validation.service.js" defer></script>
+    <script src="scripts/app.js" defer></script>
+
+    <!-- Polyfill for Cross-Domain AJAX requests in IE 8 and 9 -->
+    <!--[if lte IE 9]>
+      <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.2/jquery.xdomainrequest.min.js'></script>
+  <![endif]-->
+</head>
+
+<body>
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Loan Payment</a>
+                <span>
+                    <label class="inverse-nav">Inverse Nav
+                        <input type="checkbox" id="InverseNav" />
+                    </label>
+                    <label class="theme-select-container">Theme
+                    <select id="ThemeSelector">
+                        <option value="https://bootswatch.com/cerulean/bootstrap.min.css">CERULEAN</option>
+                        <option value="https://bootswatch.com/cosmo/bootstrap.min.css" selected>COSMO</option>
+                        <option value="https://bootswatch.com/cyborg/bootstrap.min.css">CYBORG</option>
+                        <option value="https://bootswatch.com/darkly/bootstrap.min.css">DARKLY</option>
+                        <option value="https://bootswatch.com/flatly/bootstrap.min.css">FLATLY</option>
+                        <option value="https://bootswatch.com/journal/bootstrap.min.css">JOURNAL</option>
+                        <option value="https://bootswatch.com/lumen/bootstrap.min.css">LUMEN</option>
+                        <option value="https://bootswatch.com/paper/bootstrap.min.css">PAPER</option>
+                        <option value="https://bootswatch.com/readable/bootstrap.min.css">READABLE</option>
+                        <option value="https://bootswatch.com/sandstone/bootstrap.min.css">SANDSTONE</option>
+                        <option value="https://bootswatch.com/simplex/bootstrap.min.css">SIMPLEX</option>
+                        <option value="https://bootswatch.com/slate/bootstrap.min.css">SLATE</option>
+                        <option value="https://bootswatch.com/solar/bootstrap.min.css">SOLAR</option>
+                        <option value="https://bootswatch.com/spacelab/bootstrap.min.css">SPACELAB</option>
+                        <option value="https://bootswatch.com/superhero/bootstrap.min.css">SUPERHERO</option>
+                        <option value="https://bootswatch.com/united/bootstrap.min.css">UNITED</option>
+                        <option value="https://bootswatch.com/yeti/bootstrap.min.css">YETI</option>
+                    </select>
+                </label>
+                </span>
+            </div>
+        </div>
+    </nav>
+    <div class="jumbotron">
+        <!-- logo can be dynamically injected here using fi-logo service -->
+        <img id="logo" src="imgs/logo.jpg" />
+    </div>
+    <div id="body" class="container">
+        <!-- Pop Up-->
+        <div id="PopupWindow" class="modal fade" role="dialog" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog" style="width: 340px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+                        <h4 class="modal-title" id="PopupTitle"></h4>
+                    </div>
+                    <div class="modal-body" style="font-size: 19px; text-align: left" align="center" id="PopupContent">
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        <button type="button" class="btn btn-primary" id="PopupPrintButton">Print</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Form -->
+        <div id="LoanSubmitScreen">
+            <form id="LoanForm" autocomplete="on">
+                <div class="row">
+
+                    <!-- Payer Information Panel-->
+                    <div class="col-xs-12 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Payer Information</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <label for="PayerName">Full Name</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="1" type="text" id="PayerName" name="PayerName" data-val="true" data-val-required="Required" autofocus="autofocus" required/>
+                                        <span class="requiredField">*</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <label for="PayerPhoneNumber">Phone Number</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="2" type="tel" id="PayerPhoneNumber" name="PayerPhoneNumber" data-val="true" data-val-required="Required" data-mask="(999)999-9999" placeholder="(555)123-4567" required/>
+                                        <span class="requiredField">*</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <label for="PayerReceiptEmail">Receipt Email</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="3" type="text" id="PayerReceiptEmail" name="PayerReceiptEmail" data-val="true" data-val-required="Required" title="Valid email address required" placeholder="email@example.com" required/>
+                                        <span class="requiredField">*</span>
+                                    </div>
+                                </div>
+                                <div class="row external-only">
+                                    <div class="col-xs-5">
+                                        <label for="PayerZipCode">Zip Code</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="4" type="text" id="PayerZipCode" name="PayerZipCode" data-mask="99999?-9999" Title="Valid zip code required" required/>
+                                        <span class="requiredField">*</span>
+                                        <img id="ZipCodeBusyIndicator" class="busy-indicator for-input" alt="Loading" src="imgs/busy.gif" />
+                                    </div>
+                                </div>
+                                <div class="row external-only">
+                                    <div class="col-xs-5">
+                                        <label for="PayerAddress">Address</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="5" type="text" id="PayerAddress" name="PayerAddress" />
+                                    </div>
+                                </div>
+                                <div class="row external-only">
+                                    <div class="col-xs-5">
+                                        <label for="PayerCity">City</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="6" type="text" id="PayerCity" name="PayerCity" />
+                                    </div>
+                                </div>
+                                <div class="row external-only">
+                                    <div class="col-xs-5">
+                                        <label for="PayerState">State</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <select tabindex="7" style="font-size: 1.2em" id="PayerState" name="PayerState">
+                                            <option value="AL">Alabama</option>
+                                            <option value="AK">Alaska</option>
+                                            <option value="AS">American Samoa</option>
+                                            <option value="AZ">Arizona</option>
+                                            <option value="AR">Arkansas</option>
+                                            <option value="CA">California</option>
+                                            <option value="CO">Colorado</option>
+                                            <option value="CT">Connecticut</option>
+                                            <option value="DE">Delaware</option>
+                                            <option value="FL">Florida</option>
+                                            <option value="GA">Georgia</option>
+                                            <option value="GU">Guam</option>
+                                            <option value="HI">Hawaii</option>
+                                            <option value="ID">Idaho</option>
+                                            <option value="IL">Illinois</option>
+                                            <option value="IN">Indiana</option>
+                                            <option value="IA">Iowa</option>
+                                            <option value="KS">Kansas</option>
+                                            <option value="KY">Kentucky</option>
+                                            <option value="LA">Louisiana</option>
+                                            <option value="ME">Maine</option>
+                                            <option value="MD">Maryland</option>
+                                            <option value="MA">Massachusetts</option>
+                                            <option value="MI">Michigan</option>
+                                            <option value="MN">Minnesota</option>
+                                            <option value="MS">Mississippi</option>
+                                            <option value="MO">Missouri</option>
+                                            <option value="MT">Montana</option>
+                                            <option value="NE">Nebraska</option>
+                                            <option value="NV">Nevada</option>
+                                            <option value="NH">New Hampshire</option>
+                                            <option value="NJ">New Jersey</option>
+                                            <option value="NM">New Mexico</option>
+                                            <option value="NY">New York</option>
+                                            <option value="NC">North Carolina</option>
+                                            <option value="ND">North Dakota</option>
+                                            <option value="MP">Northern Mariana Islands</option>
+                                            <option value="OH">Ohio</option>
+                                            <option value="OK">Oklahoma</option>
+                                            <option value="OR">Oregon</option>
+                                            <option value="PA">Pennsylvania</option>
+                                            <option value="PR">Puerto Rico</option>
+                                            <option value="RI">Rhode Island</option>
+                                            <option value="SC">South Carolina</option>
+                                            <option value="SD">South Dakota</option>
+                                            <option value="TN">Tennessee</option>
+                                            <option value="TX">Texas</option>
+                                            <option value="UM">United States Minor Outlying Islands</option>
+                                            <option value="UT">Utah</option>
+                                            <option value="VT">Vermont</option>
+                                            <option value="VI">Virgin Islands</option>
+                                            <option value="VA">Virginia</option>
+                                            <option value="WA">Washington</option>
+                                            <option value="WV">West Virginia</option>
+                                            <option value="WI">Wisconsin</option>
+                                            <option value="WY">Wyoming</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Information Panel-->
+                    <div class="col-xs-12 col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Payment Information</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <label for="LoanNumber">Loan Number</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="4" type="text" id="LoanNumber" name="LoanNumber" data-val="true" data-val-required="Required" required />
+                                        <span class="requiredField">*</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <label for="LoanAmount">Payment Amount</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="5" type="text" id="LoanAmount" name="LoanAmount" data-val="true" data-val-required="Required" title="Non-zero amount required" pattern="\$?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{0,2})?" placeholder="$0.00" required/>
+                                        <span class="requiredField">*</span>
+                                    </div>
+                                </div>
+                                <div class="row" id="FeeBusyIndicator" class="busy-indicator">
+                                    <img alt="Loading" src="imgs/busy.gif" />
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <select tabindex="7" style="font-size: 1.2em" id="paymentTypeSelector" name="PaymentTypeSelector">
+                                          <option value="BankAccount">Bank Account</option>
+                                          <option value="CreditOrDebit">Credit Card</option>
+                                          <option value="CreditOrDebit">Debit Card</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="PayWithCard">
+                                    <hr/>
+
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <span class="sub-title">Make payment with the following card:</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <label for="cc-number">Card Number</label>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <input tabindex="8" type="text" class="cc-number" name="cc-number" id="cc-number" data-val="true" placeholder="1234 5678 9012 3456" data-val-required="Required" required/>
+                                        <span class="requiredField">*</span>
+                                        <span id="blank" class="iconCardBrand" title="Blank">
+                                            <img class="cc-logo blank" alt="Blank" src="imgs/blank.png" />
+                                        </span>
+                                        <span id="visa" class="iconCardBrand" title="Visa">
+                                            <img class="cc-logo visa" alt="Visa" src="imgs/visa.png" />
+                                        </span>
+                                        <span id="visaelectron" class="iconCardBrand" title="VisaElectron">
+                                            <img class="cc-logo visa-electron" alt="VisaElectron" src="imgs/visa-electron.png" />
+                                        </span>
+                                        <span id="mastercard" class="iconCardBrand" title="MasterCard">
+                                            <img class="cc-logo master-card" alt="MasterCard" src="imgs/mastercard.png" />
+                                        </span>
+                                        <span id="maestro" class="iconCardBrand" title="Maestro">
+                                            <img class="cc-logo maestro" alt="Maestro" src="imgs/maestro.png" />
+                                        </span>
+                                        <span id="discover" class="iconCardBrand" title="Discover">
+                                            <img class="cc-logo discover" alt="Discover" src="imgs/discover.png" />
+                                        </span>
+                                        <span id="valid" class="iconCardBrand" title="Valid">
+                                            <img class="cc-logo valid" alt="Valid" src="imgs/check.png" />
+                                        </span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="cc-exp">Expiration Date</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="9" type="text" class="cc-exp" id="cc-exp" name="cc-exp" data-val="true" data-val-required="Required" placeholder="mm/yy" required/>
+                                            <span class="requiredField">*</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="cc-cvv">CVV</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="10" type="text" class="cc-cvv" id="cc-cvv" name="cc-cvv" data-val="true" data-val-required="Required" placeholder="123" required/>
+                                            <span class="requiredField">*</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="CardHolderName">Name on Card</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="11" type="text" id="cc-nameOnCard" name="cc-nameOnCard" data-val="true" data-val-required="Required" placeholder="John Doe" required/>
+                                            <span class="requiredField">*</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="PayWithBankAccount">
+                                    <hr/>
+
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <span class="sub-title">Make payment from the following account:</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="BankAccountType">Account Type</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <select tabindex="15" style="font-size: 1.2em" id="BankAccountType" name="BankAccountType">
+                                              <option value="Checking">Checking</option>
+                                              <option value="Savings">Savings</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="BankRoutingNumber">Routing Number</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="12" type="text" id="BankRoutingNumber" name="BankRoutingNumber" data-val="true" data-val-required="Required" pattern="[0-9]*" />
+                                            <img id="RoutingBusyIndicator" class="busy-indicator for-input" title="Loading" alt="loading" src="imgs/busy.gif" />
+                                            <span class="requiredField">*</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="BankName">Bank Name</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="13" type="text" id="BankName" name="BankName" readonly="readonly" disabled="disabled" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="BankAccountNumber">Account Number</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="14" type="text" id="BankAccountNumber" name="BankAccountNumber" data-val="true" data-val-required="Required" pattern="[0-9]*" required />
+                                            <span class="requiredField">*</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row internal-only">
+                        <!-- Payment Instructions -->
+                        <div class="col-xs-12 col-md-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Payment Instructions</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <textarea maxlength="100" id="MemoMessage" name="MemoMessage" placeholder="Type your message" tabindex="17"></textarea>
+                                            <p style="font-size: 11px; margin-bottom: 0px;">100 characters is the max per message</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Employee Information Panel -->
+                        <div class="col-xs-12 col-md-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Employee Information</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="EmployeeName">Employee ID</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="16" type="text" id="EmployeeName" name="EmployeeName" data-val="true" data-val-required="Required" required/>
+                                            <span class="requiredField">*</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <label for="BranchName">Department</label>
+                                        </div>
+                                        <div class="col-xs-7">
+                                            <input tabindex="17" type="text" id="BranchName" name="BranchName" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-3 col-lg-2">
+                            <button tabindex="18" type="button" class="btn btn-primary btn-lg" id="LoanSubmitButton">Submit</button>
+                        </div>
+                        <div class="col-xs-4 col-md-2 col-lg-1">
+                            <button tabindex="19" type="button" class="btn btn-default" id="LoanCancelButton">Clear</button>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+        <div id="LoanConfirmScreen">
+            <div class="row">
+                <!-- Payment Confirmation Information Panel-->
+                <div class="col-xs-12 col-md-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Payment Information</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmLoanNumber">Loan Number</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmLoanNumber" name="ConfirmLoanNumber" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row" id="ConfirmBankNameRow">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmBankName">Bank Name</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmBankName" name="ConfirmBankName" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row" id="ConfirmBankRoutingNumberRow">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmBankRoutingNumber">Routing Number</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmBankRoutingNumber" name="ConfirmBankRoutingNumber" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row" id="ConfirmBankAccountNumberRow">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmBankAccountNumber">Account Number</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmBankAccountNumber" name="ConfirmBankAccountNumber" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row" id="ConfirmBankAccountTypeRow">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmBankAccountType">Account Type</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmBankAccountType" name="ConfirmBankAccountType" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row" id="ConfirmCardNumberRow">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmCardNumber">Card Info</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmCardNumber" name="ConfirmCardNumber" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmLoanAmount">Amount</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmLoanAmount" name="ConfirmLoanAmount" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmLoanFee">Fee Amount</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmLoanFee" name="ConfirmLoanFee" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmLoanTotal">Total Amount</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmLoanTotal" name="ConfirmLoanTotal" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmFeeType">Payment Type</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmFeeType" name="ConfirmFeeType" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label class="memo-label" for="ConfirmMemo">Message</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <textarea type="text" id="ConfirmMemo" name="ConfirmMemo" readonly="readonly" disabled="disabled"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmEmployee">Employee</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmEmployee" name="ConfirmEmployee" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ConfirmBranch">Branch</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="ConfirmBranch" name="ConfirmBranch" readonly="readonly" disabled="disabled" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p id="TermsOfService" class="terms-and-conditions"></p>
+                <label class="terms-checkbox-label terms-and-conditions">
+                    <input onchange="TermsService.termsCheckedChanged()" type="checkbox" id="isTermsAccepted" />
+                    <span>Yes, I have read the terms and conditions specified above and I agree to authorize this transaction.</span>
+                </label>
+                <hr />
+                <div class="row">
+                    <div class="col-xs-7 col-md-3 col-lg-2">
+                        <button tabindex="-1" type="button" class="btn btn-primary btn-lg" id="ConfirmSubmitButton" disabled="disabled">Submit Payment</button>
+                        <div id="ConfirmSubmitBusyIndicator" class="busy-indicator" class="btn btn-primary" title="Submitting">
+                            <img alt="Submitting" src="imgs/busy.gif" /> Submitting
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-md-2 col-lg-1">
+                        <button tabindex="-1" type="button" class="btn btn-default" id="ConfirmCancelButton">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <iframe id="jetpay-redirect-iframe" name="jetpay-redirect-iframe" style="display:none;"></iframe>
+</body>
+
+</html>
