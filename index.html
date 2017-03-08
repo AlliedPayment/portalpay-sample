@@ -59,30 +59,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Loan Payment</a>
                 <span>
-                    <label class="inverse-nav">Inverse Nav
-                        <input type="checkbox" id="InverseNav" />
-                    </label>
-                    <label class="theme-select-container">Theme
-                    <select id="ThemeSelector">
-                        <option value="https://bootswatch.com/cerulean/bootstrap.min.css">CERULEAN</option>
-                        <option value="https://bootswatch.com/cosmo/bootstrap.min.css" selected>COSMO</option>
-                        <option value="https://bootswatch.com/cyborg/bootstrap.min.css">CYBORG</option>
-                        <option value="https://bootswatch.com/darkly/bootstrap.min.css">DARKLY</option>
-                        <option value="https://bootswatch.com/flatly/bootstrap.min.css">FLATLY</option>
-                        <option value="https://bootswatch.com/journal/bootstrap.min.css">JOURNAL</option>
-                        <option value="https://bootswatch.com/lumen/bootstrap.min.css">LUMEN</option>
-                        <option value="https://bootswatch.com/paper/bootstrap.min.css">PAPER</option>
-                        <option value="https://bootswatch.com/readable/bootstrap.min.css">READABLE</option>
-                        <option value="https://bootswatch.com/sandstone/bootstrap.min.css">SANDSTONE</option>
-                        <option value="https://bootswatch.com/simplex/bootstrap.min.css">SIMPLEX</option>
-                        <option value="https://bootswatch.com/slate/bootstrap.min.css">SLATE</option>
-                        <option value="https://bootswatch.com/solar/bootstrap.min.css">SOLAR</option>
-                        <option value="https://bootswatch.com/spacelab/bootstrap.min.css">SPACELAB</option>
-                        <option value="https://bootswatch.com/superhero/bootstrap.min.css">SUPERHERO</option>
-                        <option value="https://bootswatch.com/united/bootstrap.min.css">UNITED</option>
-                        <option value="https://bootswatch.com/yeti/bootstrap.min.css">YETI</option>
-                    </select>
-                </label>
+                    
                 </span>
             </div>
         </div>
@@ -92,6 +69,12 @@
         <img id="logo" src="imgs/logo.jpg" />
     </div>
     <div id="body" class="container">
+        <!-- Demo Alert -->
+        <div class="alert alert-dismissible alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Warning!</h4>
+            <p>This page is a demo and is unable to sumbit payments</p>
+        </div>
         <!-- Pop Up-->
         <div id="PopupWindow" class="modal fade" role="dialog" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog" style="width: 340px">
@@ -589,6 +572,90 @@
                 </div>
             </div>
         </div>
+        <div id="SettingsScreen">
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Application Settings</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <label for="ThemeSelector">Theme</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <select id="ThemeSelector">
+                                        <option value="https://bootswatch.com/cerulean/bootstrap.min.css">CERULEAN</option>
+                                        <option value="https://bootswatch.com/cosmo/bootstrap.min.css" selected>COSMO</option>
+                                        <option value="https://bootswatch.com/cyborg/bootstrap.min.css">CYBORG</option>
+                                        <option value="https://bootswatch.com/darkly/bootstrap.min.css">DARKLY</option>
+                                        <option value="https://bootswatch.com/flatly/bootstrap.min.css">FLATLY</option>
+                                        <option value="https://bootswatch.com/journal/bootstrap.min.css">JOURNAL</option>
+                                        <option value="https://bootswatch.com/lumen/bootstrap.min.css">LUMEN</option>
+                                        <option value="https://bootswatch.com/paper/bootstrap.min.css">PAPER</option>
+                                        <option value="https://bootswatch.com/readable/bootstrap.min.css">READABLE</option>
+                                        <option value="https://bootswatch.com/sandstone/bootstrap.min.css">SANDSTONE</option>
+                                        <option value="https://bootswatch.com/simplex/bootstrap.min.css">SIMPLEX</option>
+                                        <option value="https://bootswatch.com/slate/bootstrap.min.css">SLATE</option>
+                                        <option value="https://bootswatch.com/solar/bootstrap.min.css">SOLAR</option>
+                                        <option value="https://bootswatch.com/spacelab/bootstrap.min.css">SPACELAB</option>
+                                        <option value="https://bootswatch.com/superhero/bootstrap.min.css">SUPERHERO</option>
+                                        <option value="https://bootswatch.com/united/bootstrap.min.css">UNITED</option>
+                                        <option value="https://bootswatch.com/yeti/bootstrap.min.css">YETI</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" id="InverseNavRow">
+                                <div class="col-xs-5">
+                                    <label for="InverseNav">Inverse Nav</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="checkbox" id="InverseNav" />
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row" id="PageTypeSettingRow">
+                                <div class="col-xs-5">
+                                    <label for="PageTypeSetting">Page Type</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <select id="PageTypeSelector">
+                                        <option value="EXTERNAL">External</option>
+                                        <option value="INTERNAL">Internal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" id="DomainSettingRow">
+                                <div class="col-xs-5">
+                                    <label for="DomainSetting">Domain</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="DomainSetting" name="DomainSetting" />
+                                </div>
+                            </div>
+                            <div class="row" id="DomainSettingRow">
+                                <div class="col-xs-5">
+                                    <label for="DomainSetting">Domain</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="DomainSetting" name="DomainSetting" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7 col-md-3 col-lg-2">
+                        <button tabindex="-1" type="button" class="btn btn-primary btn-lg" id="ConfirmSettingsButton" >Save</button>
+                    </div>
+                    <div class="col-xs-4 col-md-2 col-lg-1">
+                        <button tabindex="-1" type="button" class="btn btn-default" id="SettingsCancelButton">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <iframe id="jetpay-redirect-iframe" name="jetpay-redirect-iframe" style="display:none;"></iframe>
 </body>
