@@ -1,8 +1,11 @@
 var PageTypeService = (function($, config, self) {
+    var page = '';
 
     function injectPageClass() {
-        var page = config.pageType.toLowerCase();
-        $('html').addClass(page);
+        var newPage = config.pageType.toLowerCase();
+        $('html').removeClass(page)
+        $('html').addClass(newPage);
+        page = newPage;
     }
 
     self.injectPageClass = injectPageClass;

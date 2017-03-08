@@ -1,4 +1,4 @@
-var Config = (function(self) {
+var Config = (function($, self) {
     // convience vars
     var INTERNAL = 'INTERNAL',
         EXTERNAL = 'EXTERNAL',
@@ -6,6 +6,7 @@ var Config = (function(self) {
 
     var apiRoot = 'https://api.demo.alliedpayment.com';
     var fiId = '073374eb-39f0-42b6-be07-c69a1f2b9cfc';
+
 
     // App Vars
     self.bankDomain = 'allied';
@@ -28,4 +29,4 @@ var Config = (function(self) {
 
     //export module
     return self;
-}(Config || {}));
+}(jQuery, Config || {}));

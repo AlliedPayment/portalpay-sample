@@ -187,3 +187,17 @@ hr {
     bottom: -6px;
     color: #fff;
 }
+
+#SettingsScreen{
+    display:none;
+}
+
+#settingsToggle{
+    background: transparent; 
+    box-shadow: none;
+    border:none;
+}
+
+#settingsToggle .glyphicon{
+    font-size: 24px;
+}

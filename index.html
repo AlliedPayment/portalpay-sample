@@ -42,6 +42,7 @@
     <script src="scripts/session.service.js" defer></script>
     <script src="scripts/terms.service.js" defer></script>
     <script src="scripts/theme.service.js" defer></script>
+    <script src="scripts/settings.service.js" defer></script>
     <script src="scripts/utility.service.js" defer></script>
     <script src="scripts/validation.service.js" defer></script>
     <script src="scripts/app.js" defer></script>
@@ -57,11 +58,13 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Loan Payment</a>
-                <span>
-                    
-                </span>
+                <a class="navbar-brand" href="javascript:void(0);">Loan Payment</a>
             </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li id="settingsToggle">
+                    <a href="javascript:void(0);"><span class="glyphicon glyphicon-cog" aria-label="Settings"></span></a>
+                </li>
+            </ul>
         </div>
     </nav>
     <div class="jumbotron">
@@ -612,6 +615,7 @@
                                 </div>
                                 <div class="col-xs-7">
                                     <input type="checkbox" id="InverseNav" />
+                                    <span id="InverseNavDesc"></span>
                                 </div>
                             </div>
                             <hr />
@@ -626,7 +630,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row" id="DomainSettingRow">
+                            <!--<div class="row" id="DomainSettingRow">
                                 <div class="col-xs-5">
                                     <label for="DomainSetting">Domain</label>
                                 </div>
@@ -634,23 +638,47 @@
                                     <input type="text" id="DomainSetting" name="DomainSetting" />
                                 </div>
                             </div>
-                            <div class="row" id="DomainSettingRow">
+                            <div class="row" id="BankNameSettingRow">
                                 <div class="col-xs-5">
-                                    <label for="DomainSetting">Domain</label>
+                                    <label for="BankNameSetting">Bank Name</label>
                                 </div>
                                 <div class="col-xs-7">
-                                    <input type="text" id="DomainSetting" name="DomainSetting" />
+                                    <input type="text" id="BankNameSetting" name="BankNameSetting" />
                                 </div>
                             </div>
+                            <div class="row" id="BankRoutingSettingRow">
+                                <div class="col-xs-5">
+                                    <label for="BankRoutingSetting">Bank Routing Number</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="BankRoutingSetting" name="BankRoutingSetting" />
+                                </div>
+                            </div>
+                            <div class="row" id="PrivateKeySettingRow">
+                                <div class="col-xs-5">
+                                    <label for="PrivateKeySetting">Private Key</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="PrivateKeySetting" name="PrivateKeySetting" />
+                                </div>
+                            </div>
+                            <div class="row" id="PublicKeySettingRow">
+                                <div class="col-xs-5">
+                                    <label for="PublicKeySetting">Public Key</label>
+                                </div>
+                                <div class="col-xs-7">
+                                    <input type="text" id="PublicKeySetting" name="PublicKeySetting" />
+                                </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-7 col-md-3 col-lg-2">
-                        <button tabindex="-1" type="button" class="btn btn-primary btn-lg" id="ConfirmSettingsButton" >Save</button>
+                        <button tabindex="-1" type="button" class="btn btn-primary btn-lg" id="SaveSettingsButton">Save</button>
                     </div>
                     <div class="col-xs-4 col-md-2 col-lg-1">
-                        <button tabindex="-1" type="button" class="btn btn-default" id="SettingsCancelButton">Back</button>
+                        <button tabindex="-1" type="button" class="btn btn-default" id="ResetSettingsButton">Reset</button>
                     </div>
                 </div>
             </div>
