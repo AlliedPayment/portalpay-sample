@@ -8,16 +8,18 @@ var Config = (function($, self) {
     var fiId = '073374eb-39f0-42b6-be07-c69a1f2b9cfc';
 
 
-    // App Vars
+    // App config
     self.bankDomain = 'allied';
-    self.bankFees = null;
     self.bankName = 'Allied Payment';
     self.bankRTN = '';
-    self.bankTerms = null;
-    self.pageType = EXTERNAL;
     self.publicKey = '';
     self.privateKey = '';
-
+    self.pageType = EXTERNAL;
+    
+    // Shared application data
+    self.bankTerms = null;
+    self.bankFees = null;
+    
     // Routes
     self.urlAddressLookup = apiRoot + '/address';
     self.urlJetPayLogger = apiRoot + '/jetpay/log';
