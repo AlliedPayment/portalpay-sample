@@ -30,7 +30,8 @@ hr {
     visibility: hidden;
     position: absolute;
     top: 4px;
-    margin-left: 3px;
+    margin-left: -22px;
+    left: 0px;
 }
 
 .cc-logo.blank {
