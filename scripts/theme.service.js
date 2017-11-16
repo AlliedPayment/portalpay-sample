@@ -2,7 +2,7 @@ var ThemeService = (function($, self) {
     var linkTag, select, inverse, navbar, isInverse, themePath, inverseDesc,
         themeKey = 'theme',
         navKey = 'nav',
-        fallback = 'https://bootswatch.com/cosmo/bootstrap.min.css';
+        fallback = 'https://bootswatch.com/3/cosmo/bootstrap.min.css';
 
     function save() {
         store(themeKey, themePath);
